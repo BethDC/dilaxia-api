@@ -5,14 +5,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import it.avbo.dilaxia.api.entities.User;
-
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
 public class JwtService {
-    private final static String SECRET_KEY = "297e0e4131e92faf0c536d4c910f3c93111f0cac1c8cc3035b125e9d729d7071";
+    private final static String SECRET_KEY = RandomStringUtils.random(64, true, true);
 
     public static String generateToken(User user) {
         return Jwts.builder()

@@ -1,8 +1,8 @@
 package it.avbo.dilaxia.api;
 
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
 @ApplicationPath("/")
-public class ApplicationConfig {
+public class ApplicationConfig extends Application {
 }
