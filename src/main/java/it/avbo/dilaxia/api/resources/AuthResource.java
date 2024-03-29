@@ -1,9 +1,11 @@
 package it.avbo.dilaxia.api.resources;
 
+import it.avbo.dilaxia.api.database.DBWrapper;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.AuthResponse;
 import it.avbo.dilaxia.api.models.auth.LoginModel;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
+import it.avbo.dilaxia.api.models.auth.enums.UserRole;
 import it.avbo.dilaxia.api.services.JwtService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,6 +17,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.wildfly.security.password.PasswordFactory;
 import org.wildfly.security.password.interfaces.SaltedSimpleDigestPassword;
 import org.wildfly.security.password.spec.ClearPasswordSpec;
@@ -29,8 +32,6 @@ import java.util.Optional;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private static final PasswordFactory passwordFactory;
 
@@ -45,10 +46,11 @@ public class AuthResource {
     @POST
     @Path("/login")
     public Response login(LoginModel loginModel) {
-        User user = entityManager.find(User.class, loginModel.getUsername());
-        if(user == null) {
+        Optional<User> result = DBWrapper.getUserByUsername(loginModel.getUsername());
+        if(result.isEmpty()) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
+        User user = result.get();
         SaltedHashPasswordSpec saltedHashSpec = new SaltedHashPasswordSpec(user.getPasswordDigest(), user.getSalt());
 
         try {
@@ -65,15 +67,31 @@ public class AuthResource {
     @Path("/register")
     @Transactional
     public Response register(RegistrationModel registrationModel) {
+        if(!EmailValidator.getInstance().isValid(registrationModel.getEmail())) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+
         ClearPasswordSpec clearPasswordSpec = new ClearPasswordSpec(registrationModel.getPassword().toCharArray());
         try {
             SaltedSimpleDigestPassword digestedPassword = (SaltedSimpleDigestPassword) passwordFactory.generatePassword(clearPasswordSpec);
             User user = new User(
                     registrationModel.getUsername(),
+                    registrationModel.getEmail(),
                     digestedPassword.getDigest(),
                     digestedPassword.getSalt()
             );
-            entityManager.persist(user);
+
+
+            if(registrationModel.getEmail().contains("@aldini")) {
+                user.setRole(UserRole.Student);
+            } else if(registrationModel.getEmail().contains("@avbo")) {
+                user.setRole(UserRole.Teacher);
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+
+            DBWrapper.addUser(user);
             String token = JwtService.generateToken(user);
             return Response.ok(new AuthResponse(token)).build();
         } catch (InvalidKeySpecException ignored) {
