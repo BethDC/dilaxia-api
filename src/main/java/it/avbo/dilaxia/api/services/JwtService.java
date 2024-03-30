@@ -18,7 +18,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 24)) // 1 giorno
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 ora
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -34,6 +34,10 @@ public class JwtService {
     public static String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+    public static Date extractExpirationDate(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
     public static <T> T extractClaim(String token, Function<Claims, T> resolver) {
         Claims claims = extractAllClaims(token);
         return resolver.apply(claims);

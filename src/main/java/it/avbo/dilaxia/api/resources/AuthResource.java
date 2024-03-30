@@ -7,9 +7,6 @@ import it.avbo.dilaxia.api.models.auth.LoginModel;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
 import it.avbo.dilaxia.api.models.auth.enums.UserRole;
 import it.avbo.dilaxia.api.services.JwtService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -57,7 +54,7 @@ public class AuthResource {
             SaltedSimpleDigestPassword restored = (SaltedSimpleDigestPassword) passwordFactory.generatePassword(saltedHashSpec);
             passwordFactory.verify(restored, loginModel.getPassword().toCharArray());
             String token = JwtService.generateToken(user);
-            return Response.ok(new AuthResponse(token)).build();
+            return Response.ok(new AuthResponse(token, JwtService.extractExpirationDate(token))).build();
         } catch (InvalidKeyException | InvalidKeySpecException e) {
             return Response.serverError().build();
         }
@@ -70,7 +67,6 @@ public class AuthResource {
         if(!EmailValidator.getInstance().isValid(registrationModel.getEmail())) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-
 
         ClearPasswordSpec clearPasswordSpec = new ClearPasswordSpec(registrationModel.getPassword().toCharArray());
         try {
@@ -95,7 +91,7 @@ public class AuthResource {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
             }
             String token = JwtService.generateToken(user);
-            return Response.ok(new AuthResponse(token)).build();
+            return Response.ok(new AuthResponse(token, JwtService.extractExpirationDate(token))).build();
         } catch (InvalidKeySpecException ignored) {
             return Response.serverError().build();
         }
