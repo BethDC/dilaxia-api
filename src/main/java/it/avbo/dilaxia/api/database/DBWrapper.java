@@ -2,25 +2,30 @@ package it.avbo.dilaxia.api.database;
 
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.enums.UserRole;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.*;
 import java.util.Optional;
 
 public class DBWrapper {
     static private final Connection dbConnection;
-
+    static private final MariaDbDataSource dataSource;
     static {
         try {
-            dbConnection = DriverManager.getConnection(
-                    "jdbc:mariadb://localhost:3306/dilaxia",
-                    "root", ""
-            );
+            dataSource = new MariaDbDataSource();
+            dataSource.setUrl("jdbc:mariadb://localhost:3306/dilaxia");
+            dataSource.setUser("root");
+            dataSource.setPassword(null);
+
+            dbConnection = dataSource.getConnection();
+            //setupDatabase();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static Optional<User> getUserByUsername(String username) {
+    public static Optional<User> getUserByUsername(@NonNull String username) {
         try(PreparedStatement statement = dbConnection.prepareStatement("""
             SELECT *
             FROM users
@@ -45,7 +50,7 @@ public class DBWrapper {
             return Optional.empty();
         }
     }
-    public static boolean addUser(User user) {
+    public static boolean addUser(@NonNull User user) {
         try(PreparedStatement statement = dbConnection.prepareStatement("""
             INSERT INTO users(username, email, password_hash, salt, role)
             values (?,?,?,?,?)
@@ -55,25 +60,27 @@ public class DBWrapper {
             statement.setBytes(3, user.getPasswordDigest());
             statement.setBytes(4, user.getSalt());
             statement.setInt(5, user.getRole().getValue());
-            return statement.execute();
+            statement.execute();
+            return true;
         } catch (SQLException e) {
             return false;
         }
     }
 
     public static void setupDatabase() {
-        try(PreparedStatement statement = dbConnection.prepareStatement("""
-            USING dilaxia;
-            
+        String dbInitialization = """
+            USE dilaxia;
+            DROP TABLE IF EXISTS users;
             CREATE TABLE users (
-                VARCHAR(30) username PRIMARY_KEY,
-                VARCHAR(50) email UNIQUE NOT NULL,
-                VARBINARY(256) password_hash NOT NULL,
-                VARBINARY(64) salt NOT NULL,
-                TINYINT role NOT NULL 
+                username VARCHAR(30) PRIMARY KEY,
+                email VARCHAR(50) NOT NULL UNIQUE,
+                password_hash VARBINARY(256) NOT NULL,
+                salt VARBINARY(64) NOT NULL,
+                user_role TINYINT NOT NULL
             );
-        """)) {
-            statement.execute();
+        """;
+        try(Statement statement = dbConnection.createStatement()) {
+            statement.executeUpdate(dbInitialization);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

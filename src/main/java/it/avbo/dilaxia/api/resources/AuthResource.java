@@ -91,7 +91,9 @@ public class AuthResource {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             }
 
-            DBWrapper.addUser(user);
+            if(!DBWrapper.addUser(user)) {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
             String token = JwtService.generateToken(user);
             return Response.ok(new AuthResponse(token)).build();
         } catch (InvalidKeySpecException ignored) {
