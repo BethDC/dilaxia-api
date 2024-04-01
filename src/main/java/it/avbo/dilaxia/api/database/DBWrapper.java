@@ -11,15 +11,16 @@ import java.util.Optional;
 public class DBWrapper {
     static private final Connection dbConnection;
     static private final MariaDbDataSource dataSource;
-    static {
-        try {
-            dataSource = new MariaDbDataSource();
-            dataSource.setUrl("jdbc:mariadb://localhost:3306/dilaxia");
-            dataSource.setUser("root");
-            dataSource.setPassword(null);
 
-            dbConnection = dataSource.getConnection();
-            //DBWrapper.setupDatabase();
+    static {
+        dataSource = new MariaDbDataSource();
+        try {
+            dataSource.setUrl("jdbc:mariadb://localhost:3306/dilaxia");
+
+        dataSource.setUser("root");
+        dataSource.setPassword(null);
+
+        dbConnection = dataSource.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -95,10 +96,8 @@ public class DBWrapper {
         }
     }
 
-    public static void setupDatabase() {
+    public static void setupDatabase() throws SQLException {
         String dbInitialization = """
-        USE dilaxia;
-            
         CREATE OR REPLACE TABLE users (
             username VARCHAR(30) PRIMARY KEY,
             email VARCHAR(50) NOT NULL UNIQUE,

@@ -15,6 +15,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.apache.commons.validator.routines.RegexValidator;
 import org.wildfly.security.password.PasswordFactory;
 import org.wildfly.security.password.interfaces.SaltedSimpleDigestPassword;
 import org.wildfly.security.password.spec.ClearPasswordSpec;
@@ -31,8 +32,12 @@ import java.util.Optional;
 public class AuthResource {
 
     private static final PasswordFactory passwordFactory;
+    private static final RegexValidator usernameValidator;
 
     static {
+        usernameValidator = new RegexValidator(
+                "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$"
+        );
         try {
             passwordFactory = PasswordFactory.getInstance(SaltedSimpleDigestPassword.ALGORITHM_SALT_PASSWORD_DIGEST_SHA_256);
         } catch (NoSuchAlgorithmException e) {
@@ -64,7 +69,9 @@ public class AuthResource {
     @Path("/register")
     @Transactional
     public Response register(RegistrationModel registrationModel) {
-        if(!EmailValidator.getInstance().isValid(registrationModel.getEmail())) {
+
+        if(!(EmailValidator.getInstance().isValid(registrationModel.getEmail()) &&
+                usernameValidator.isValid(registrationModel.getUsername()))) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
