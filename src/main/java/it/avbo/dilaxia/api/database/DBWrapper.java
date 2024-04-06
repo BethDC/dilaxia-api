@@ -18,7 +18,7 @@ public class DBWrapper {
             dataSource.setUrl("jdbc:mariadb://localhost:3306/dilaxia");
 
         dataSource.setUser("root");
-        dataSource.setPassword(null);
+        dataSource.setPassword("dilaxia");
 
         dbConnection = dataSource.getConnection();
         } catch (SQLException e) {
