@@ -27,15 +27,15 @@ premere il testo run e fare il setup con Wildfly ultima versione
 
 ```js
 const response = await fetch("http://95.216.204.15/dilaxia-api/auth/login", {
-		method:"POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			username:"admin",
-			password:"admin"
-		}),
-	});
-	console.log(await response.json());
-}
+	method:"POST",
+	headers: {
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		username:"admin",
+		password:"admin"
+	}),
+});
+console.log(await response.json());
+
 ```
