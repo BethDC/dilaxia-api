@@ -9,10 +9,6 @@ import java.sql.SQLException;
 public class AppServletContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent contextEvent) {
-        try {
-            DBWrapper.setupDatabase();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        DBWrapper.setupDatabase();
     }
 }

@@ -1,23 +1,21 @@
 package it.avbo.dilaxia.api.entities;
 
+import com.google.gson.annotations.SerializedName;
 import it.avbo.dilaxia.api.models.auth.enums.UserRole;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "users") // 'user' è una parola ristretta
 public class User {
-    @Id
-    @Column(unique = true)
+
+    @SerializedName("username")
     private String username;
-    @Column(unique = true)
+    @SerializedName("email")
     private String email;
-
+    @SerializedName("role")
     private UserRole role;
+    @SerializedName("password_digest")
     private byte[] passwordDigest;
+    @SerializedName("salt")
     private byte[] salt;
-
-    public User() {
-    }
 
     public User(String username, String email, byte[] passwordDigest, byte[] salt) {
         this.username = username;

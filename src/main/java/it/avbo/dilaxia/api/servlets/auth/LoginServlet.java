@@ -1,12 +1,10 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
-import it.avbo.dilaxia.api.database.DBWrapper;
 import it.avbo.dilaxia.api.database.UsersSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.LoginModel;
 import it.avbo.dilaxia.api.services.Utils;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +35,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if(req.isRequestedSessionIdValid()) {
             resp.setStatus(Response.Status.OK.getStatusCode());
             return;

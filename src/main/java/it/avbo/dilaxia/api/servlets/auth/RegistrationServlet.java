@@ -1,13 +1,10 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
-import it.avbo.dilaxia.api.database.DBWrapper;
 import it.avbo.dilaxia.api.database.UsersSource;
 import it.avbo.dilaxia.api.entities.User;
-import it.avbo.dilaxia.api.models.auth.AuthResponse;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
 import it.avbo.dilaxia.api.models.auth.enums.UserRole;
-import it.avbo.dilaxia.api.services.JwtService;
 import it.avbo.dilaxia.api.services.Utils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -44,7 +41,7 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Optional<String> data = Utils.stringFromReader(req.getReader());
 
         if(data.isEmpty()) {
