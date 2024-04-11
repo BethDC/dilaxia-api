@@ -2,6 +2,7 @@ package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
 import it.avbo.dilaxia.api.database.DBWrapper;
+import it.avbo.dilaxia.api.database.UsersSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.LoginModel;
 import it.avbo.dilaxia.api.services.Utils;
@@ -37,6 +38,10 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(req.isRequestedSessionIdValid()) {
+            resp.setStatus(Response.Status.OK.getStatusCode());
+            return;
+        }
 
         Optional<String> data = Utils.stringFromReader(req.getReader());
         if(data.isEmpty()) {
@@ -45,7 +50,7 @@ public class LoginServlet extends HttpServlet {
         }
         LoginModel loginModel = gson.fromJson(data.get(), LoginModel.class);
 
-        Optional<User> result = DBWrapper.getUserByUsername(loginModel.getUsername());
+        Optional<User> result = UsersSource.getUserByUsername(loginModel.getUsername());
         if(result.isEmpty()) {
             resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
             return;

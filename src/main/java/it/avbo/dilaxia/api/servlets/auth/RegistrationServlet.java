@@ -2,6 +2,7 @@ package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
 import it.avbo.dilaxia.api.database.DBWrapper;
+import it.avbo.dilaxia.api.database.UsersSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.AuthResponse;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
@@ -79,7 +80,7 @@ public class RegistrationServlet extends HttpServlet {
                 return;
             }
 
-            if(!DBWrapper.addUser(user)) {
+            if(!UsersSource.addUser(user)) {
                 resp.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
                 return;
             }
