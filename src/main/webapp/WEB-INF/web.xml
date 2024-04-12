@@ -15,4 +15,13 @@
 	<listener>
 		<listener-class>it.avbo.dilaxia.api.AppServletContextListener</listener-class>
 	</listener>
+	<filter>
+		<filter-name>CORSFilter</filter-name>
+		<filter-class>it.avbo.dilaxia.api.services.CorsFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>

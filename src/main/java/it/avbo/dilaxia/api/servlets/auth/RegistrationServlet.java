@@ -88,4 +88,5 @@ public class RegistrationServlet extends HttpServlet {
         }
         resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
     }
+    
 }

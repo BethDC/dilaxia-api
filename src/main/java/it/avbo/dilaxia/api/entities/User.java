@@ -5,7 +5,6 @@ import it.avbo.dilaxia.api.models.auth.enums.UserRole;
 import jakarta.persistence.*;
 
 public class User {
-
     @SerializedName("username")
     private String username;
     @SerializedName("email")
@@ -16,6 +15,8 @@ public class User {
     private byte[] passwordDigest;
     @SerializedName("salt")
     private byte[] salt;
+
+    public User(){}
 
     public User(String username, String email, byte[] passwordDigest, byte[] salt) {
         this.username = username;
