@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
         }
         LoginModel loginModel = gson.fromJson(data.get(), LoginModel.class);
 
-        Optional<User> result = UsersSource.getUserByUsername(loginModel.getUsername());
+        Optional<User> result = UsersSource.getUserByIdentifier(loginModel.getUsername());
         if(result.isEmpty()) {
             resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
             return;

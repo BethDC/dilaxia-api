@@ -11,59 +11,32 @@ import java.util.Optional;
 
 public class UsersSource {
 
-    public static Optional<User> getUserByUsername(@NonNull String username) {
+    public static Optional<User> getUserByIdentifier(@NonNull String identifier) {
         try(PreparedStatement statement = DBWrapper.connection.prepareStatement("""
-            SELECT *
-            FROM users
-            WHERE users.username = ?
-            LIMIT 1
-        """)) {
-            statement.setString(1, username);
+          SELECT *
+          FROM users
+          WHERE users.username = ? OR users.email = ?
+          LIMIT 1
+      """)) {
+            statement.setString(1, identifier);
+            statement.setString(2, identifier);
+
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()) {
-                return Optional.of(
-                        new User(
-                                resultSet.getString("username"),
-                                resultSet.getString("email"),
-                                UserRole.fromValue(resultSet.getInt("role")),
-                                resultSet.getBytes("password_hash"),
-                                resultSet.getBytes("salt")
-                        )
-                );
+            if (resultSet.next()) {
+                return Optional.of(new User(
+                        resultSet.getString("username"),
+                        resultSet.getString("email"),
+                        UserRole.fromValue(resultSet.getInt("role")),
+                        resultSet.getBytes("password_hash"),
+                        resultSet.getBytes("salt")
+                ));
             }
             return Optional.empty();
-
-        } catch (SQLException e) {
+        }catch (SQLException e) {
             return Optional.empty();
         }
     }
 
-    public static Optional<User> getUserByEmail(@NonNull String email) {
-        try(PreparedStatement statement = DBWrapper.connection.prepareStatement("""
-            SELECT *
-            FROM users
-            WHERE users.email = ?
-            LIMIT 1
-        """)) {
-            statement.setString(1, email);
-            ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()) {
-                return Optional.of(
-                        new User(
-                                resultSet.getString("username"),
-                                resultSet.getString("email"),
-                                UserRole.fromValue(resultSet.getInt("role")),
-                                resultSet.getBytes("password_hash"),
-                                resultSet.getBytes("salt")
-                        )
-                );
-            }
-            return Optional.empty();
-
-        } catch (SQLException e) {
-            return Optional.empty();
-        }
-    }
 
 
     public static boolean addUser(@NonNull User user) {

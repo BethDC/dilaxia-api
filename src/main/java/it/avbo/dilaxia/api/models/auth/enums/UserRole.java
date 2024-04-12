@@ -2,7 +2,8 @@ package it.avbo.dilaxia.api.models.auth.enums;
 
 public enum UserRole {
     Student(0),
-    Teacher(1);
+    Teacher(1),
+    External(2);
 
     private int value;
     UserRole(int value) {

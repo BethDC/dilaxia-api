@@ -6,7 +6,6 @@ import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
 import it.avbo.dilaxia.api.models.auth.enums.UserRole;
 import it.avbo.dilaxia.api.services.Utils;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +40,7 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Optional<String> data = Utils.stringFromReader(req.getReader());
 
         if(data.isEmpty()) {
@@ -73,8 +72,7 @@ public class RegistrationServlet extends HttpServlet {
             } else if(registrationModel.getEmail().contains("@avbo")) {
                 user.setRole(UserRole.Teacher);
             } else {
-                resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
-                return;
+                user.setRole(UserRole.External);
             }
 
             if(!UsersSource.addUser(user)) {
@@ -85,6 +83,7 @@ public class RegistrationServlet extends HttpServlet {
             resp.setStatus(Response.Status.OK.getStatusCode());
             return;
         } catch (InvalidKeySpecException ignored) {
+
         }
         resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
     }
