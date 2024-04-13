@@ -43,14 +43,14 @@ public class LoginServlet extends HttpServlet {
 
         Optional<String> data = Utils.stringFromReader(req.getReader());
         if(data.isEmpty()) {
-            resp.setStatus(Response.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode());
+            resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
             return;
         }
         LoginModel loginModel = gson.fromJson(data.get(), LoginModel.class);
 
-        Optional<User> result = UsersSource.getUserByIdentifier(loginModel.getUsername());
+        Optional<User> result = UsersSource.getUserByIdentifier(loginModel.getIdentifier());
         if(result.isEmpty()) {
-            resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
+            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
         User user = result.get();
@@ -59,12 +59,12 @@ public class LoginServlet extends HttpServlet {
         try {
             SaltedSimpleDigestPassword restored = (SaltedSimpleDigestPassword) passwordFactory.generatePassword(saltedHashSpec);
             if(passwordFactory.verify(restored, loginModel.getPassword().toCharArray())) {
-                req.getSession(true);
-                resp.setStatus(Response.Status.OK.getStatusCode());
+                req.getSession().setAttribute("role", user.getRole());
+                resp.setStatus(HttpServletResponse.SC_CREATED);
                 return;
             }
         } catch (InvalidKeyException | InvalidKeySpecException ignored) {
         }
-        resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
+        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

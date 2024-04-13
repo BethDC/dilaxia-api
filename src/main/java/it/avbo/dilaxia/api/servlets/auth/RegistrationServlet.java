@@ -44,7 +44,7 @@ public class RegistrationServlet extends HttpServlet {
         Optional<String> data = Utils.stringFromReader(req.getReader());
 
         if(data.isEmpty()) {
-            resp.setStatus(Response.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode());
+            resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
             return;
         }
 
@@ -52,7 +52,7 @@ public class RegistrationServlet extends HttpServlet {
 
         if(!(EmailValidator.getInstance().isValid(registrationModel.getEmail()) &&
                 usernameValidator.isValid(registrationModel.getUsername()))) {
-            resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
+            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
@@ -76,16 +76,16 @@ public class RegistrationServlet extends HttpServlet {
             }
 
             if(!UsersSource.addUser(user)) {
-                resp.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
-            req.getSession(true);
-            resp.setStatus(Response.Status.OK.getStatusCode());
+            req.getSession().setAttribute("role", user.getRole());
+            resp.setStatus(HttpServletResponse.SC_CREATED);
             return;
         } catch (InvalidKeySpecException ignored) {
 
         }
-        resp.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
+        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
     
 }
