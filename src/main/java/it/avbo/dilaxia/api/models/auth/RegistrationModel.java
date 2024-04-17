@@ -5,6 +5,10 @@ public class RegistrationModel {
 
     private String email;
 
+    private char sex;
+
+    private String birthday;
+
     private String password;
 
     public String getUsername() {
