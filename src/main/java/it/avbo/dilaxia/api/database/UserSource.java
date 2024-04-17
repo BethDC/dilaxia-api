@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserSource {
-    public Optional<User> getUserByIdentifier(String identifier) {
+    public static Optional<User> getUserByIdentifier(String identifier) {
         try (PreparedStatement statement = DBWrapper.connection.prepareStatement("""
                 SELECT *
                FROM utenti
@@ -35,7 +35,7 @@ public class UserSource {
         return Optional.empty();
     }
 
-    public boolean addUser(User user) {
+    public static boolean addUser(User user) {
         try (PreparedStatement statement = DBWrapper.connection.prepareStatement("""
                     INSERT INTO utenti(username, email, sesso, data_nascita, ruolo, password_hash, salt)
                    VALUES (?, ?, ?, ?, ?, ?, ?);
@@ -47,6 +47,7 @@ public class UserSource {
             statement.setString(5, String.valueOf(user.role.getValue()));
             statement.setBytes(6, user.passwordHash);
             statement.setBytes(7, user.salt);
+            return true;
         } catch (SQLException e) {
             return false;
         }

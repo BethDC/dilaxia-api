@@ -10,8 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1f4a3061-4a9a-437c-9e69-b66ebba7ca70" name="Changes" comment="Little update to the database">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/UserSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/UserSource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/models/auth/RegistrationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/models/auth/RegistrationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/RegistrationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/RegistrationServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/tournaments/CreateTournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/tournaments/CreateTournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/init.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,28 +42,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JBoss/WildFly Server.JBoss/WildFly 31.0.1.Final.executor": "Run",
-    "JBoss/WildFly Server.Wildfly remote.executor": "Run",
-    "Maven.dilaxia-api [clean].executor": "Run",
-    "Maven.dilaxia-api [package].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JBoss/WildFly Server.JBoss/WildFly 31.0.1.Final.executor&quot;: &quot;Run&quot;,
+    &quot;JBoss/WildFly Server.Wildfly remote.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dilaxia-api [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dilaxia-api [package].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
-      "MariaDB"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect&quot;: [
+      &quot;MariaDB&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="JBoss/WildFly 31.0.1.Final" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss/WildFly 31.0.1.Final" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="OPEN_IN_BROWSER" value="false" />
@@ -143,7 +148,9 @@
       <updated>1713015454767</updated>
       <workItem from="1713015456809" duration="49000" />
       <workItem from="1713015508039" duration="1335000" />
-      <workItem from="1713335018790" duration="9369000" />
+      <workItem from="1713335018790" duration="9527000" />
+      <workItem from="1713345844187" duration="954000" />
+      <workItem from="1713360813363" duration="563000" />
     </task>
     <task id="LOCAL-00001" summary="Little update to the database">
       <option name="closed" value="true" />

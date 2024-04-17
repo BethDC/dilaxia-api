@@ -18,10 +18,10 @@ public class CreateTournament extends HttpServlet {
         if(role == null) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
-
+        /*
         if(!TournamentSource.addTournament("dfwa")) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-        }
+        }*/
         resp.setStatus(HttpServletResponse.SC_CREATED);
 
     }

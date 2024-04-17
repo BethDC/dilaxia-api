@@ -1,6 +1,7 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
+import it.avbo.dilaxia.api.database.UserSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.LoginModel;
 import it.avbo.dilaxia.api.services.Utils;
@@ -53,12 +54,12 @@ public class LoginServlet extends HttpServlet {
             return;
         }
         User user = result.get();
-        SaltedHashPasswordSpec saltedHashSpec = new SaltedHashPasswordSpec(user.getPasswordDigest(), user.getSalt());
+        SaltedHashPasswordSpec saltedHashSpec = new SaltedHashPasswordSpec(user.passwordHash, user.salt);
 
         try {
             SaltedSimpleDigestPassword restored = (SaltedSimpleDigestPassword) passwordFactory.generatePassword(saltedHashSpec);
             if(passwordFactory.verify(restored, loginModel.getPassword().toCharArray())) {
-                req.getSession().setAttribute("role", user.getRole());
+                req.getSession().setAttribute("role", user.role);
                 resp.setStatus(HttpServletResponse.SC_CREATED);
                 return;
             }

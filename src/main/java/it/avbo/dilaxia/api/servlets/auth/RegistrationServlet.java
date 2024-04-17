@@ -1,6 +1,7 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
+import it.avbo.dilaxia.api.database.UserSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
 import it.avbo.dilaxia.api.entities.enums.UserRole;
@@ -18,6 +19,7 @@ import org.wildfly.security.password.spec.ClearPasswordSpec;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.Date;
 import java.util.Optional;
 
 @WebServlet("/auth/register")
@@ -70,6 +72,9 @@ public class RegistrationServlet extends HttpServlet {
             User user = new User(
                     registrationModel.getUsername(),
                     registrationModel.getEmail(),
+                    registrationModel.getSex(),
+                    Date.valueOf(registrationModel.getBirthday()),
+                    role,
                     digestedPassword.getDigest(),
                     digestedPassword.getSalt()
             );
@@ -81,7 +86,7 @@ public class RegistrationServlet extends HttpServlet {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
-            req.getSession().setAttribute("role", user.getRole());
+            req.getSession().setAttribute("role", user.role);
             resp.setStatus(HttpServletResponse.SC_CREATED);
             return;
         } catch (InvalidKeySpecException ignored) {
