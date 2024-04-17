@@ -1,6 +1,7 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import it.avbo.dilaxia.api.database.UserSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
@@ -47,8 +48,16 @@ public class RegistrationServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
             return;
         }
-
-        RegistrationModel registrationModel = gson.fromJson(data.get(), RegistrationModel.class);
+        RegistrationModel registrationModel;
+        try {
+            registrationModel = gson.fromJson(data.get(), RegistrationModel.class);
+        } catch (JsonSyntaxException e) {
+            resp.sendError(
+                    HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE,
+                    "Il formato dei dati inviati non corrisponde alla documentazione"
+            );
+            return;
+        }
 
         if(!(EmailValidator.getInstance().isValid(registrationModel.getEmail()) &&
                 usernameValidator.isValid(registrationModel.getUsername()))) {
@@ -79,14 +88,15 @@ public class RegistrationServlet extends HttpServlet {
                     digestedPassword.getSalt()
             );
 
-
-
-
             if(!UserSource.addUser(user)) {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                resp.sendError(
+                        HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Impossibile aggiungere l'utente"
+                );
                 return;
             }
             req.getSession().setAttribute("role", user.role);
+            req.getSession().setMaxInactiveInterval(300);
             resp.setStatus(HttpServletResponse.SC_CREATED);
             return;
         } catch (InvalidKeySpecException ignored) {

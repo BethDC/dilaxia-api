@@ -1,6 +1,7 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import it.avbo.dilaxia.api.database.UserSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.LoginModel;
@@ -43,14 +44,28 @@ public class LoginServlet extends HttpServlet {
 
         Optional<String> data = Utils.stringFromReader(req.getReader());
         if(data.isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
+            resp.sendError(
+                    HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE,
+                    "Il corpo della richiesta è vuoto"
+            );
             return;
         }
-        LoginModel loginModel = gson.fromJson(data.get(), LoginModel.class);
+        LoginModel loginModel;
+        try {
+             loginModel = gson.fromJson(data.get(), LoginModel.class);
+        } catch (JsonSyntaxException e) {
+            resp.sendError(
+                    HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE,
+                    "Il formato dei dati inviati non corrisponde alla documentazione"
+            );
+            return;
+        }
 
         Optional<User> result = UserSource.getUserByIdentifier(loginModel.getIdentifier());
         if(result.isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.sendError(
+                    HttpServletResponse.SC_UNAUTHORIZED,
+                    "Impossibile trovare l'utente");
             return;
         }
         User user = result.get();
@@ -60,11 +75,15 @@ public class LoginServlet extends HttpServlet {
             SaltedSimpleDigestPassword restored = (SaltedSimpleDigestPassword) passwordFactory.generatePassword(saltedHashSpec);
             if(passwordFactory.verify(restored, loginModel.getPassword().toCharArray())) {
                 req.getSession().setAttribute("role", user.role);
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-                return;
+                req.getSession().setMaxInactiveInterval(300);
+                resp.setStatus(HttpServletResponse.SC_OK);
             }
         } catch (InvalidKeyException | InvalidKeySpecException ignored) {
+            resp.sendError(
+                    HttpServletResponse.SC_UNAUTHORIZED,
+                    "Impossibile creare la sessione utente"
+            );
         }
-        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+
     }
 }

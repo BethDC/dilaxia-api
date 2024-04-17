@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS classi(
 CREATE TABLE IF NOT EXISTS utenti (
                                       username varchar(30) PRIMARY KEY,
                                       email varchar(50) UNIQUE NOT NULL,
-                                      sesso char(1) NOT NULL,
+                                      sesso varchar(1) NOT NULL,
                                       data_nascita date NOT NULL,
-                                      ruolo varchar(1) NOT NULL CHECK (ruolo IN("S", "I", "E", "A")),
+                                      ruolo varchar(10) NOT NULL,
                                       password_hash varbinary(256) NOT NULL,
                                       salt varbinary(64) NOT NULL
 );

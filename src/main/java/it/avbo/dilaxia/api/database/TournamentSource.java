@@ -10,7 +10,7 @@ import java.util.Optional;
 public class TournamentSource {
 
     public static Optional<Tournament> getTournamentById(Integer id) {
-        try (PreparedStatement statement = DBWrapper.connection.prepareStatement("""
+        try (PreparedStatement statement = DBWrapper.getConnection().prepareStatement("""
                    SELECT *
                    FROM tornei
                    WHERE id = ?
@@ -32,7 +32,7 @@ public class TournamentSource {
     }
 
     public static boolean addTournament(Tournament tournament) {
-        try (PreparedStatement statement = DBWrapper.connection.prepareStatement("""
+        try (PreparedStatement statement = DBWrapper.getConnection().prepareStatement("""
                     INSERT INTO tornei(id_sport, id_campo, coach, prof_creatore, descrizione)
                     values (?, ?, ?, ?, ?);
                 """)

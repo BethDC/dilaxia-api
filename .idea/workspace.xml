@@ -10,12 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1f4a3061-4a9a-437c-9e69-b66ebba7ca70" name="Changes" comment="Little update to the database">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/DBWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/DBWrapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/TournamentSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/TournamentSource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/UserSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/database/UserSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/models/auth/RegistrationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/models/auth/RegistrationModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/LoginServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/RegistrationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/auth/RegistrationServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/tournaments/CreateTournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/avbo/dilaxia/api/servlets/tournaments/CreateTournament.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/init.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -151,6 +157,8 @@
       <workItem from="1713335018790" duration="9527000" />
       <workItem from="1713345844187" duration="954000" />
       <workItem from="1713360813363" duration="563000" />
+      <workItem from="1713362349905" duration="372000" />
+      <workItem from="1713363696116" duration="3382000" />
     </task>
     <task id="LOCAL-00001" summary="Little update to the database">
       <option name="closed" value="true" />

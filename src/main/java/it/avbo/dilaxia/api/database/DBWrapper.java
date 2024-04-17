@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBWrapper {
-    static protected final Connection connection;
+    static private Connection connection;
     static private final MariaDbDataSource dataSource;
 
     static {
@@ -21,9 +21,18 @@ public class DBWrapper {
             dataSource.setUser("root");
             dataSource.setPassword("");
             connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException ignored) {
+            try {
+                dataSource.setPassword("dilaxia");
+                connection = dataSource.getConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    public static Connection getConnection() {
+        return connection;
     }
 
     public static void setupDatabase() {

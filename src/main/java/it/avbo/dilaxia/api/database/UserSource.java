@@ -11,12 +11,15 @@ import java.util.Optional;
 
 public class UserSource {
     public static Optional<User> getUserByIdentifier(String identifier) {
-        try (PreparedStatement statement = DBWrapper.connection.prepareStatement("""
+        try (PreparedStatement statement = DBWrapper.getConnection().prepareStatement("""
                 SELECT *
                FROM utenti
                WHERE username = ? OR email = ?
                LIMIT 1;
              """)) {
+
+            statement.setString(1, identifier);
+            statement.setString(2, identifier);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(new User(
@@ -30,13 +33,13 @@ public class UserSource {
                 ));
             }
         } catch (SQLException e) {
-
+            System.out.println(e.getMessage());
         }
         return Optional.empty();
     }
 
     public static boolean addUser(User user) {
-        try (PreparedStatement statement = DBWrapper.connection.prepareStatement("""
+        try (PreparedStatement statement = DBWrapper.getConnection().prepareStatement("""
                     INSERT INTO utenti(username, email, sesso, data_nascita, ruolo, password_hash, salt)
                    VALUES (?, ?, ?, ?, ?, ?, ?);
                 """)) {
@@ -47,9 +50,12 @@ public class UserSource {
             statement.setString(5, String.valueOf(user.role.getValue()));
             statement.setBytes(6, user.passwordHash);
             statement.setBytes(7, user.salt);
+
+            statement.executeUpdate();
             return true;
         } catch (SQLException e) {
             return false;
+
         }
     }
 }
