@@ -2,6 +2,9 @@ package it.avbo.dilaxia.api.database;
 
 import org.mariadb.jdbc.MariaDbDataSource;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +16,7 @@ public class DBWrapper {
     static {
         dataSource = new MariaDbDataSource();
         try {
-            dataSource.setUrl("jdbc:mariadb://localhost:3306/dilaxia");
+            dataSource.setUrl("jdbc:mariadb://localhost:3306/dilaxia?allowMultiQueries=true&createDatabaseIfNotExist=true");
 
             dataSource.setUser("root");
             dataSource.setPassword("");
@@ -24,21 +27,14 @@ public class DBWrapper {
     }
 
     public static void setupDatabase() {
-        String dbInitialization = """
-            CREATE OR REPLACE TABLE users (
-                username VARCHAR(30) PRIMARY KEY,
-                email VARCHAR(50) NOT NULL UNIQUE,
-                password_hash VARBINARY(256) NOT NULL,
-                salt VARBINARY(64) NOT NULL,
-                role TINYINT NOT NULL
-            );
-           
-           CREATE OR REPLACE TABLE tournaments (
-               id INTEGER UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-               description VARCHAR(255)
-           );
-           
-           """;
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        String dbInitialization;
+        try(InputStream inputStream = classloader.getResourceAsStream("init.sql")) {
+            assert inputStream != null;
+            dbInitialization = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(dbInitialization);

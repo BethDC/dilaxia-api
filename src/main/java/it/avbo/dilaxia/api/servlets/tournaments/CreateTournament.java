@@ -1,7 +1,7 @@
 package it.avbo.dilaxia.api.servlets.tournaments;
 
-import it.avbo.dilaxia.api.database.TournamentsSource;
-import it.avbo.dilaxia.api.models.auth.enums.UserRole;
+import it.avbo.dilaxia.api.database.TournamentSource;
+import it.avbo.dilaxia.api.entities.enums.UserRole;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,7 +19,7 @@ public class CreateTournament extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
 
-        if(!TournamentsSource.addTournament("dfwa")) {
+        if(!TournamentSource.addTournament("dfwa")) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
         resp.setStatus(HttpServletResponse.SC_CREATED);

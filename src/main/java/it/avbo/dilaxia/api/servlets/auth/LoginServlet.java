@@ -1,7 +1,6 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
-import it.avbo.dilaxia.api.database.UsersSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.LoginModel;
 import it.avbo.dilaxia.api.services.Utils;
@@ -48,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         }
         LoginModel loginModel = gson.fromJson(data.get(), LoginModel.class);
 
-        Optional<User> result = UsersSource.getUserByIdentifier(loginModel.getIdentifier());
+        Optional<User> result = UserSource.getUserByIdentifier(loginModel.getIdentifier());
         if(result.isEmpty()) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;

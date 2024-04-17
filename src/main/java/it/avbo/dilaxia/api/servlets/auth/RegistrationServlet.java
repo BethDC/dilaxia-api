@@ -1,16 +1,14 @@
 package it.avbo.dilaxia.api.servlets.auth;
 
 import com.google.gson.Gson;
-import it.avbo.dilaxia.api.database.UsersSource;
 import it.avbo.dilaxia.api.entities.User;
 import it.avbo.dilaxia.api.models.auth.RegistrationModel;
-import it.avbo.dilaxia.api.models.auth.enums.UserRole;
+import it.avbo.dilaxia.api.entities.enums.UserRole;
 import it.avbo.dilaxia.api.services.Utils;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.Response;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.RegexValidator;
 import org.wildfly.security.password.PasswordFactory;
@@ -59,6 +57,16 @@ public class RegistrationServlet extends HttpServlet {
         ClearPasswordSpec clearPasswordSpec = new ClearPasswordSpec(registrationModel.getPassword().toCharArray());
         try {
             SaltedSimpleDigestPassword digestedPassword = (SaltedSimpleDigestPassword) passwordFactory.generatePassword(clearPasswordSpec);
+
+            UserRole role;
+            if(registrationModel.getEmail().contains("@aldini")) {
+                role = UserRole.Student;
+            } else if(registrationModel.getEmail().contains("@avbo")) {
+                role = UserRole.Teacher;
+            } else {
+                role = UserRole.External;
+            }
+
             User user = new User(
                     registrationModel.getUsername(),
                     registrationModel.getEmail(),
@@ -67,15 +75,9 @@ public class RegistrationServlet extends HttpServlet {
             );
 
 
-            if(registrationModel.getEmail().contains("@aldini")) {
-                user.setRole(UserRole.Student);
-            } else if(registrationModel.getEmail().contains("@avbo")) {
-                user.setRole(UserRole.Teacher);
-            } else {
-                user.setRole(UserRole.External);
-            }
 
-            if(!UsersSource.addUser(user)) {
+
+            if(!UserSource.addUser(user)) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
